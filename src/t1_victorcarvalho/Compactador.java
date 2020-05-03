@@ -5,77 +5,62 @@
  */
 package t1_victorcarvalho;
 
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
 /**
  *
- * @author victor lopes de carvalho
+ * @author victor
  */
 public class Compactador {
 
-    private No ini;
+    public static void main(String[] args) {
+        ListaEncadeada lst = new ListaEncadeada(); //declara o compactador 
+        String[] palavrasDaLinha; //lista de palavras
+        String textoCompactado = ""; //texto final
 
-    public Compactador() {
-        this.ini = null;
-    }
+        int indiceDaPalavra;
+        try {
+            List<String> textoCompleto = Files.readAllLines(Paths.get("arquivo.txt")); //lê o arquivo inteiro e seta na list textoCompleto
+            textoCompactado = String.join("\n", textoCompleto); //texto final já copiado
 
-    public boolean vazia() {
-        return ini == null;
-    }
+            BufferedWriter writer = new BufferedWriter(new FileWriter("saida.txt")); //gera o arquivo saida e declara o writer
 
-    public void insereInicio(String elemento) {
-        No novo = new No(elemento, ini);
-        ini = novo;
-    }
+            for (String linha : textoCompleto) { //anda pelo texto completo
+                if (linha.equals("0")) {//verifica se o texto e sai do texto quando ocorrido
+                    break;
+                }
 
-    @Override
-    public String toString() {
-        String strLista = "";
-        No temp = ini;
+                palavrasDaLinha = linha.split("\\W+"); //splita as palavras da linha atual
 
-        while (temp != null) {
-            strLista = strLista + temp.getElemento() + " ";
-            temp = temp.getProx(); //ir para o próximo nó da lista
-        }
-        return strLista;
-    }
+                for (String palavra : palavrasDaLinha) { //anda na linha atual
+                    indiceDaPalavra = lst.buscaLinearIt(palavra);//verifica se a palavra está na lista encadeada e retorna a posição
+                    if (indiceDaPalavra == -1) {//se for igual a -1, ele adiciona a palavra na lista encadeada
+                        if (palavra.equals("")) {//.split(\\W+) não identifica o identador, se for "", não faz nada
+                        } else {
+                            lst.insereInicio(palavra); //adiciona a palavra na lista encadeada
+                        }
+                    } else {
 
-    public void remove(String elemento) {
-        if (vazia()) {
-            System.out.println("Lista Vazia!");
-        } else {
-            No temp = ini;
-            No anterior = null;
+                        int indiceDaPrimeiraOcorrencia = textoCompactado.indexOf(palavra); //indice da primeira ocorrencia da palavra no texto final
+                        String inicioDoTexto = textoCompactado.substring(0, indiceDaPrimeiraOcorrencia + palavra.length());//separa a primeira parte do texto antes da segunda ocorrencia
+                        String finalDoTexto = textoCompactado.substring(indiceDaPrimeiraOcorrencia + palavra.length());//separa a segunda a parte do texto junto da segunda ocorrencia
 
-            while (temp != null && !temp.getElemento().equals(elemento)) {
-                anterior = temp;
-                temp = temp.getProx();
-            }
-            //Somente 1 nó na lista
-            if (anterior == null) {
-                ini = ini.getProx(); //Remove do início
-            } else {
-                if (temp != null && temp.getElemento().equals(elemento)) {
-                    anterior.setProx(temp.getProx()); //removendo o vínculo temp
-                } else {
-                    System.out.println(elemento + " NÃO está lista");
+                        textoCompactado = inicioDoTexto + finalDoTexto.replaceFirst(palavra, Integer.toString(indiceDaPalavra));
+                        lst.remove(palavra);//remove a palavra da lista
+                        lst.insereInicio(palavra);//insera a palavra no inicio da lista novamente
+                        indiceDaPalavra = 0;//zera o indice da palavra
+                    }
                 }
             }
+
+            writer.write(textoCompactado);
+
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-
     }
-
-    public int buscaLinearIt(String x) {
-        No temp = ini;
-        int pos = 1;
-
-        while (temp != null) {
-            if (temp.getElemento().equals(x)) {//Achou
-                return pos;
-            } else {
-                pos++;
-                temp = temp.getProx();
-            }
-        }
-        return -1;//Não achou
-    }
-
 }
