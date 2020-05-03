@@ -12,7 +12,7 @@ import java.lang.*;
 
 /**
  *
- * @author victor
+ * @author victor lopes de carvalho
  */
 public class Descompactador extends Object {
 

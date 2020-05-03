@@ -11,7 +11,7 @@ import java.util.*;
 
 /**
  *
- * @author victor
+ * @author victor lopes de carvalho
  */
 public class Compactador {
 
