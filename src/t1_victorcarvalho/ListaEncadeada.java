@@ -63,19 +63,40 @@ public class ListaEncadeada {
 
     }
 
-    public int buscaLinearIt(String x) {
+    public int buscaIndex(String x) {
         No temp = ini;
-        int pos = 1;
+        int index = 1;
 
         while (temp != null) {
             if (temp.getElemento().equals(x)) {//Achou
-                return pos;
+                return index;
             } else {
-                pos++;
+                index++;
                 temp = temp.getProx();
             }
         }
         return -1;//Não achou
+    }
+
+    public String buscaElemento(String x) {
+        No temp = ini;
+        int index = 1;
+        if (isNumeric(x)) {
+            while (temp != null) {
+                if (index == Integer.parseInt(x)) {//Achou
+                    return temp.getElemento();
+                } else {
+                    index++;
+                    temp = temp.getProx();
+                }
+            }
+
+        }
+         return null; //não achou
+    }
+
+    private static boolean isNumeric(String s) {
+        return s != null && s.matches("\\d+");
     }
 
 }

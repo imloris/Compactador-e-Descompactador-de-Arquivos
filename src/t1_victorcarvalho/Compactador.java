@@ -22,20 +22,20 @@ public class Compactador {
 
         int indiceDaPalavra;
         try {
-            List<String> textoCompleto = Files.readAllLines(Paths.get("arquivo.txt")); //lê o arquivo inteiro e seta na list textoCompleto
+            List<String> textoCompleto = Files.readAllLines(Paths.get("compactar.txt")); //lê o arquivo inteiro e seta na list textoCompleto
             textoCompactado = String.join("\n", textoCompleto); //texto final já copiado
 
             BufferedWriter writer = new BufferedWriter(new FileWriter("saida.txt")); //gera o arquivo saida e declara o writer
 
             for (String linha : textoCompleto) { //anda pelo texto completo
-                if (linha.equals("0")) {//verifica se o texto e sai do texto quando ocorrido
+                if (linha.equals("0")) {//condição de parada da leitura
                     break;
                 }
 
                 palavrasDaLinha = linha.split("\\W+"); //splita as palavras da linha atual
 
                 for (String palavra : palavrasDaLinha) { //anda na linha atual
-                    indiceDaPalavra = lst.buscaLinearIt(palavra);//verifica se a palavra está na lista encadeada e retorna a posição
+                    indiceDaPalavra = lst.buscaIndex(palavra);//verifica se a palavra está na lista encadeada e retorna a posição
                     if (indiceDaPalavra == -1) {//se for igual a -1, ele adiciona a palavra na lista encadeada
                         if (palavra.equals("")) {//.split(\\W+) não identifica o identador, se for "", não faz nada
                         } else {
