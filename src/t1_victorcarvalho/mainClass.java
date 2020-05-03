@@ -16,47 +16,50 @@ import java.util.*;
 public class mainClass {
 
     public static void main(String[] args) {
-        Compactador compactador = new Compactador();
-        String close = "0";
-        ArrayList<String> listaDePalavras = new ArrayList<String>();
-        String[] palavrasDaLinha;
-        String textoCompactado = "";
+        Compactador compactador = new Compactador(); //declara o compactador 
+        String[] palavrasDaLinha; //lista de palavras
+        String textoCompactado = ""; //texto final
 
-        int indiceFinalDaPalavra;
+        int indiceDaPalavra;
         try {
-            // BufferedReader reader = new BufferedReader(new FileReader("arquivo.txt"));
-            List<String> textoCompleto = Files.readAllLines(Paths.get("arquivo.txt"));
-            textoCompactado = String.join("\n", textoCompleto);
+            List<String> textoCompleto = Files.readAllLines(Paths.get("arquivo.txt")); //lê o arquivo inteiro e seta na list textoCompleto
+            textoCompactado = String.join("\n", textoCompleto); //texto final já copiado
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter("saida.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("saida.txt")); //gera o arquivo saida e declara o writer
 
-            
-            
-            for (String linha : textoCompleto) {
-                if (linha == "0") {
+            for (String linha : textoCompleto) { //anda pelo texto completo
+                if (linha.equals("0")) {//verifica se o texto e sai do texto quando ocorrido
                     break;
                 }
 
-                palavrasDaLinha = linha.split("\\W+");
+                palavrasDaLinha = linha.split("\\W+"); //splita as palavras da linha atual
 
-                for (String palavra : palavrasDaLinha) {
-                    indiceFinalDaPalavra = compactador.buscaLinearIt(palavra);
-                    if (indiceFinalDaPalavra == -1) {
-                        compactador.insereInicio(palavra);
+                for (String palavra : palavrasDaLinha) { //anda na linha atual
+                    indiceDaPalavra = compactador.buscaLinearIt(palavra);//verifica se a palavra está na lista encadeada e retorna a posição
+                    if (indiceDaPalavra == -1) {//se for igual a -1, ele adiciona a palavra na lista encadeada
+                        if (palavra.equals("")) {//.split(\\W+) não identifica o identador, se for "", não faz nada
+                        } else {
+                            compactador.insereInicio(palavra); //adiciona a palavra na lista encadeada
+                        }
                     } else {
-                        int indiceDaPrimeiraOcorrencia = textoCompactado.indexOf(palavra);
 
-                        String inicioDoTexto = textoCompactado.substring(0, indiceDaPrimeiraOcorrencia + palavra.length());
-                        String finalDoTexto = textoCompactado.substring(indiceDaPrimeiraOcorrencia + palavra.length());
-                        textoCompactado = inicioDoTexto + finalDoTexto.replaceFirst(palavra, Integer.toString(indiceFinalDaPalavra));
-                        compactador.remove(palavra);
-                        compactador.insereInicio(palavra);
-                        indiceFinalDaPalavra=0;
-                        
+                        int indiceDaPrimeiraOcorrencia = textoCompactado.indexOf(palavra); //indice da primeira ocorrencia da palavra no texto final
+                        String inicioDoTexto = textoCompactado.substring(0, indiceDaPrimeiraOcorrencia + palavra.length());//separa a primeira parte do texto antes da segunda ocorrencia
+                        String finalDoTexto = textoCompactado.substring(indiceDaPrimeiraOcorrencia + palavra.length());//separa a segunda a parte do texto junto da segunda ocorrencia
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        System.out.println(palavra);
+                        System.out.println(finalDoTexto);
+
+                        textoCompactado = inicioDoTexto + finalDoTexto.replaceFirst(
+                                palavra, Integer.toString(indiceDaPalavra));
+
+                        System.out.println(textoCompactado);
+                        compactador.remove(palavra);//remove a palavra da lista
+                        compactador.insereInicio(palavra);//insera a palavra no inicio da lista novamente
+                        indiceDaPalavra = 0;//zera o indice da palavra
                     }
                 }
-               
-
             }
 
             writer.write(textoCompactado);
@@ -68,49 +71,3 @@ public class mainClass {
         }
     }
 }
-
-
-//    public static void main(String[] args) {
-//        Compactador compactador = new Compactador();
-//        String close = "0", linha = " ", vetor[];
-//        int pos;
-//        try {
-//
-//            BufferedReader reader = new BufferedReader(new FileReader("arquivo.txt"));
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("saida.txt"));
-//
-////            linha = reader.readLine();
-////            vetor = linha.split("\\W");
-////            
-////            for(int i = 0; i < vetor.length; i++){
-////                pos =  compactador.buscaLinearIt(vetor[i]);
-////                System.out.println(pos);
-////                if(pos == -1){
-////                    compactador.insereInicio(vetor[i]);
-////                    writer.write(vetor[i]);
-////                    System.out.println(vetor[i]);
-////                    i++;
-////                }
-////                else{
-////                    writer.write(Integer.toString(pos));
-////                    System.out.println(pos);
-////                    i++;
-////                }
-////                
-////            }
-//            
-//            while (!linha.equals(close)) {
-//                linha = reader.readLine();                
-//                writer.write(linha+"\n");
-//                
-//            }
-//
-//            reader.close();
-//            writer.flush();
-//            writer.close();
-//
-//        } catch (Exception e) {
-//        }
-//
-//    }
-
