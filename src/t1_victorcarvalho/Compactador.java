@@ -19,13 +19,23 @@ public class Compactador {
 
     public boolean vazia() {
         return ini == null;
-
     }
 
     public void insereInicio(String elemento) {
         No novo = new No(elemento, ini);
         ini = novo;
+    }
 
+    @Override
+    public String toString() {
+        String strLista = "";
+        No temp = ini;
+
+        while (temp != null) {
+            strLista = strLista + temp.getElemento() + " ";
+            temp = temp.getProx(); //ir para o próximo nó da lista
+        }
+        return strLista;
     }
 
     public void remove(String elemento) {
@@ -60,10 +70,10 @@ public class Compactador {
         while (temp != null) {
             if (temp.getElemento().equals(x)) {//Achou
                 return pos;
+            } else {
+                pos++;
+                temp = temp.getProx();
             }
-            pos++;
-            temp = temp.getProx();
-
         }
         return -1;//Não achou
     }

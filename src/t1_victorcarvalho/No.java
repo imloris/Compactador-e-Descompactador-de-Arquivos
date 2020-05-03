@@ -10,11 +10,10 @@ package t1_victorcarvalho;
  * @author victor lopes de carvalho
  */
 public class No {
-
     private String elemento;
     private No prox;
-    
-    public No(String elemento, No proxNo){
+
+    public No(String elemento, No prox) {
         this.elemento = elemento;
         this.prox = prox;
     }
@@ -23,13 +22,12 @@ public class No {
         return elemento;
     }
 
-
-    public void setElemento(String elemento) {
-        this.elemento = elemento;
-    }
-
     public No getProx() {
         return prox;
+    }
+
+    public void setElemento (String elemento) {
+        this.elemento = elemento;
     }
 
     public void setProx(No prox) {
@@ -38,6 +36,8 @@ public class No {
 
     @Override
     public String toString() {
-        return "No{" + "elemento=" + elemento + ", prox=" + prox + '}';
+        return "elemento=" + elemento + ", prox=" + prox;
     }
+    
+    
 }
